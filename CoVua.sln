@@ -5,22 +5,6 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoVua", "CoVua.csproj", "{58E42AA2-A9A4-49B6-AA28-FDF28252EFB4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{0D18D6B4-C112-4404-882A-2EF6C9FF3AA4}"
-	ProjectSection(SolutionItems) = preProject
-		bin\Debug\images\images\bishop_black.png = bin\Debug\images\images\bishop_black.png
-		bin\Debug\images\images\bishop_white.png = bin\Debug\images\images\bishop_white.png
-		bin\Debug\images\images\king_black.png = bin\Debug\images\images\king_black.png
-		bin\Debug\images\images\king_white.png = bin\Debug\images\images\king_white.png
-		bin\Debug\images\images\knight_black.png = bin\Debug\images\images\knight_black.png
-		bin\Debug\images\images\knight_white.png = bin\Debug\images\images\knight_white.png
-		bin\Debug\images\images\pawn_black.png = bin\Debug\images\images\pawn_black.png
-		bin\Debug\images\images\pawn_white.png = bin\Debug\images\images\pawn_white.png
-		bin\Debug\images\images\queen_black.png = bin\Debug\images\images\queen_black.png
-		bin\Debug\images\images\queen_white.png = bin\Debug\images\images\queen_white.png
-		bin\Debug\images\images\rook_black.png = bin\Debug\images\images\rook_black.png
-		bin\Debug\images\images\rook_white.png = bin\Debug\images\images\rook_white.png
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

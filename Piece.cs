@@ -28,7 +28,6 @@ namespace Chess
     internal class Piece
     { 
         private Square _square;
-        private Broad _broad;
         public Square Square
         {
             get { return _square; }
@@ -36,34 +35,37 @@ namespace Chess
                 _square.Image = value.Image;
             }
         }
-        public Broad Broad { get; set; }
         protected Image _image;
         public Image Image => _image;
         public enum ColorPiece { white, black}; 
         private ColorPiece _color;
         public ColorPiece Color=>_color;
 
-        Square[,] squares;
-        public Piece(ref Square square, ColorPiece color, Broad broad)
+        protected Square[,] _squares;
+        public Piece(ref Square square, ColorPiece color, ref Square[,] squares)
         {
             _square = square;
             _color = color;
             square.Piece = this;
-            _broad = broad;
-            squares= _broad.squares;
+            _squares=  squares;
         }
         public Stack<Square> stack;
+        protected int IndexRow, IndexCol;
         public virtual void Ways()
         {
+
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
-                { }
-
+                    if (Square == _squares[i, j])
+                    {
+                        IndexCol = j;
+                        IndexRow = i;
+                    }
         }
     }
     internal class ROOK : Piece
     {
-        public ROOK(ref Square sq, ColorPiece color,Broad broad) : base(ref sq, color,broad)
+        public ROOK(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color,ref squares)
         {
             if (color == ColorPiece.white)
                 _image = Resource.IMG_ROOK_WHITE;
@@ -72,13 +74,39 @@ namespace Chess
             sq.Image = _image;
         }
         public override void Ways()
-        { 
+        {
+            base.Ways();
+            for (int i = IndexRow + 1; i < 8; i++)
+            {
+                if (_squares[i, IndexCol].Piece != null)
+                    break;
+                _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
+            }
+            for (int i = IndexRow -1; i >=0; i--)
+            {
+                if (_squares[i, IndexCol].Piece != null)
+                    break;
+                _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
+            }
+            for (int i = IndexCol + 1; i < 8; i++)
+            {
+                if (_squares[IndexRow, i].Piece != null)
+                    break;
+                _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
+            }
+            for (int i = IndexCol - 1; i >= 0; i--)
+            {
+                if (_squares[IndexRow, i].Piece != null)
+                    break;
+                _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
+            }
+
         }
     }
 
     internal class BISHOP : Piece
     {
-        public BISHOP(ref Square sq, ColorPiece color, Broad broad) : base(ref sq, color, broad)
+        public BISHOP(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
             if (color == ColorPiece.white)
                 _image = Resource.IMG_BISHOP_WHITE;
@@ -89,7 +117,7 @@ namespace Chess
     }
     internal class KING : Piece
     {
-        public KING(ref Square sq, ColorPiece color, Broad broad) : base(ref sq, color, broad)
+        public KING(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
             if (color == ColorPiece.white)
                 _image = Resource.IMG_KING_WHITE;
@@ -100,7 +128,7 @@ namespace Chess
     }
     internal class KNIGHT : Piece
     {
-        public KNIGHT(ref Square sq, ColorPiece color, Broad broad) : base(ref sq, color, broad)
+        public KNIGHT(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
             if (color == ColorPiece.white)
                 _image = Resource.IMG_KNIGHT_WHITE;
@@ -111,7 +139,7 @@ namespace Chess
     }
     internal class PAWN : Piece
     {
-        public PAWN(ref Square sq, ColorPiece color, Broad broad) : base(ref sq, color, broad)
+        public PAWN(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
             if (color == ColorPiece.white)
                 _image = Resource.IMG_PAWN_WHITE;
@@ -122,7 +150,7 @@ namespace Chess
     }
     internal class QUEEN : Piece
     {
-        public QUEEN(ref Square sq, ColorPiece color, Broad broad) : base(ref sq, color, broad)
+        public QUEEN(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
             if (color == ColorPiece.white)
                 _image = Resource.IMG_QUEEN_WHITE;

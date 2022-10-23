@@ -34,15 +34,16 @@ namespace Chess
                     SquareSelect.Color = SquareSelect.Color;
                 sq.BackColor = Color.Yellow;
                 SquareSelect = sq;
-                
+
                 ///Remove click nhung quan co khac mau khac
-                 ///Add move squareSelect
-                 ///
+                ///Add move squareSelect
+                ///
+                sq.Piece.Ways();
                 for (int i = 0; i < 8; i++)
                     for (int j = 0; j < 8; j++)
                     {
-                        bool IsTeam;
-                        //Try catch trach o trong : xoa cac o trong click
+                        /*bool IsTeam;
+                        //Try catch o trong : xoa cac o trong click
                         try
                         {
                             IsTeam = sq.Piece.Color == squares[i, j].Piece.Color;
@@ -51,10 +52,15 @@ namespace Chess
                         {
                             IsTeam=false;
                         }
+                        //Khong cung team xoa click va them move
+                        Bug
+                        //if (!IsTeam)
+                        {*/
+                            squares[i, j].Click -= new EventHandler(ClickSquare);
                             squares[i, j].Click += new EventHandler(MovePiece);
-                            squares[i, j].Click += new EventHandler(ClickSquare);
+
                     }
-                
+
             }
         }
         void MovePiece(object sender, EventArgs args)
@@ -73,14 +79,15 @@ namespace Chess
                 //Remove Piece Before Square
                 SquareSelect.Piece= null;
                 SquareSelect.Image = null;
+                SquareSelect = null;
                 //Move thanh cong them lai cac click cho cac o khac
                 //Xoa move vi Squareselect.piece = null;
                 for (int i = 0; i < 8; i++)
                     for (int j = 0; j < 8; j++)
                     {
-                        //Them clicksquare lai cho cac squares
 
                         squares[i, j].Click += new EventHandler(ClickSquare);
+
                         squares[i, j].Click -= new EventHandler(MovePiece);
                     }
             }
@@ -120,40 +127,40 @@ namespace Chess
             }
             
             //White ROOK
-            Piece White_Rook1 = new ROOK(ref squares[0, 0], Piece.ColorPiece.white,this);
-            Piece White_Rook2 = new ROOK(ref squares[0, 7], Piece.ColorPiece.white, this);
+            Piece White_Rook1 = new ROOK(ref squares[0, 0], Piece.ColorPiece.white, ref squares);
+            Piece White_Rook2 = new ROOK(ref squares[0, 7], Piece.ColorPiece.white, ref squares);
             //White KNIGHT
-            Piece White_Kngiht1 = new KNIGHT(ref squares[0, 1], Piece.ColorPiece.white, this);
-            Piece White_Knight2 = new KNIGHT(ref squares[0, 6], Piece.ColorPiece.white, this);
+            Piece White_Kngiht1 = new KNIGHT(ref squares[0, 1], Piece.ColorPiece.white, ref squares);
+            Piece White_Knight2 = new KNIGHT(ref squares[0, 6], Piece.ColorPiece.white, ref squares);
             //White KNIGHT
-            Piece White_Bishop1 = new BISHOP(ref squares[0, 2], Piece.ColorPiece.white, this);
-            Piece White_Bishop2 = new BISHOP(ref squares[0, 5], Piece.ColorPiece.white, this);
+            Piece White_Bishop1 = new BISHOP(ref squares[0, 2], Piece.ColorPiece.white, ref squares);
+            Piece White_Bishop2 = new BISHOP(ref squares[0, 5], Piece.ColorPiece.white, ref squares);
             //White Queen
-            Piece White_Queen = new QUEEN(ref squares[0, 3], Piece.ColorPiece.white, this);
+            Piece White_Queen = new QUEEN(ref squares[0, 3], Piece.ColorPiece.white, ref squares);
             //White King
-            Piece White_King = new KING(ref squares[0, 4], Piece.ColorPiece.white, this);
+            Piece White_King = new KING(ref squares[0, 4], Piece.ColorPiece.white, ref squares);
             //White Pawn
             Piece[] White_Pawn = new PAWN[8];
             for (int i = 0; i < 8; i++)
-                White_Pawn[i] = new PAWN(ref squares[1,i], Piece.ColorPiece.white, this);
+                White_Pawn[i] = new PAWN(ref squares[1,i], Piece.ColorPiece.white, ref squares);
             
             //Black ROOK
-            Piece Black_Rook1 = new ROOK(ref squares[7, 0], Piece.ColorPiece.black, this);
-            Piece Black_Rook2 = new ROOK(ref squares[7, 7], Piece.ColorPiece.black, this);
+            Piece Black_Rook1 = new ROOK(ref squares[7, 0], Piece.ColorPiece.black, ref squares);
+            Piece Black_Rook2 = new ROOK(ref squares[7, 7], Piece.ColorPiece.black, ref squares);
             //Black KNIGHT
-            Piece Black_Kngiht1 = new KNIGHT(ref squares[7, 1], Piece.ColorPiece.black, this);
-            Piece Black_Knight2 = new KNIGHT(ref squares[7, 6], Piece.ColorPiece.black, this);
+            Piece Black_Kngiht1 = new KNIGHT(ref squares[7, 1], Piece.ColorPiece.black, ref squares);
+            Piece Black_Knight2 = new KNIGHT(ref squares[7, 6], Piece.ColorPiece.black, ref squares);
             //Black KNIGHT
-            Piece Black_Bishop1 = new BISHOP(ref squares[7, 2], Piece.ColorPiece.black, this);
-            Piece Black_Bishop2 = new BISHOP(ref squares[7, 5], Piece.ColorPiece.black, this);
+            Piece Black_Bishop1 = new BISHOP(ref squares[7, 2], Piece.ColorPiece.black, ref squares);
+            Piece Black_Bishop2 = new BISHOP(ref squares[7, 5], Piece.ColorPiece.black, ref squares);
             //Black Queen
-            Piece Black_Queen = new QUEEN(ref squares[7, 4], Piece.ColorPiece.black, this);
+            Piece Black_Queen = new QUEEN(ref squares[7, 4], Piece.ColorPiece.black, ref squares);
             //Black King
-            Piece Black_King = new KING(ref squares[7, 3], Piece.ColorPiece.black, this);
+            Piece Black_King = new KING(ref squares[7, 3], Piece.ColorPiece.black, ref squares);
             //Black Pawn
             Piece[] Black_Pawn = new PAWN[8];
             for (int i = 0; i < 8; i++)
-                Black_Pawn[i] = new PAWN(ref squares[6, i], Piece.ColorPiece.black, this);
+                Black_Pawn[i] = new PAWN(ref squares[6, i], Piece.ColorPiece.black, ref squares);
 
         }
     }
