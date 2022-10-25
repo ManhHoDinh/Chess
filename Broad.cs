@@ -31,67 +31,79 @@ namespace Chess
             {
                 //First time
                 if (SquareSelect!= null)
+                {
                     SquareSelect.Color = SquareSelect.Color;
+                    foreach (Square square in Piece.ActiveSquares)
+                    {
+                        square.Click -= new EventHandler(MovePiece);
+                        square.Color = square.Color;
+                    }
+                }
                 sq.BackColor = Color.Yellow;
                 SquareSelect = sq;
 
                 ///Remove click nhung quan co khac mau khac
                 ///Add move squareSelect
                 ///
+                
                 sq.Piece.Ways();
-                for (int i = 0; i < 8; i++)
-                    for (int j = 0; j < 8; j++)
-                    {
-                        /*bool IsTeam;
-                        //Try catch o trong : xoa cac o trong click
-                        try
-                        {
-                            IsTeam = sq.Piece.Color == squares[i, j].Piece.Color;
-                        }
-                        catch
-                        {
-                            IsTeam=false;
-                        }
-                        //Khong cung team xoa click va them move
-                        Bug
-                        //if (!IsTeam)
-                        {*/
-                            squares[i, j].Click -= new EventHandler(ClickSquare);
-                            squares[i, j].Click += new EventHandler(MovePiece);
+                foreach(Square square in Piece.ActiveSquares)
+                {
+                    square.Click -= new EventHandler(ClickSquare);
+                    square.Click += new EventHandler(MovePiece);
+                }
 
-                    }
 
             }
         }
         void MovePiece(object sender, EventArgs args)
         {
             Square sq = sender as Square;
-            if (sq.Piece == null || sq.Piece.Color != SquareSelect.Piece.Color)
+            foreach (Square square in Piece.ActiveSquares)
             {
-                //Set lai bg cu
-                SquareSelect.Color = SquareSelect.Color;
-                //Piece in new square
-                sq.Piece = SquareSelect.Piece;
-               //Square of piece
-                sq.Piece.Square = sq;
-                //New Square Image:
-                sq.Image = SquareSelect.Image;
-                //Remove Piece Before Square
-                SquareSelect.Piece= null;
-                SquareSelect.Image = null;
-                SquareSelect = null;
-                //Move thanh cong them lai cac click cho cac o khac
-                //Xoa move vi Squareselect.piece = null;
-                for (int i = 0; i < 8; i++)
-                    for (int j = 0; j < 8; j++)
-                    {
-
-                        squares[i, j].Click += new EventHandler(ClickSquare);
-
-                        squares[i, j].Click -= new EventHandler(MovePiece);
-                    }
+                square.Color = square.Color;
             }
-                
+            try
+            {
+                if (sq.Piece == null || sq.Piece != null && sq.Piece.Color != SquareSelect.Piece.Color)
+                {
+                    //Set lai bg cu
+                    SquareSelect.Color = SquareSelect.Color;
+                    //Piece in new square
+                    sq.Piece = SquareSelect.Piece;
+                    //Square of piece
+                    sq.Piece.Square = sq;
+                    //New Square Image:
+                    sq.Image = SquareSelect.Image;
+                    //Remove Piece Before Square
+                    SquareSelect.Piece = null;
+                    SquareSelect.Image = null;
+                    SquareSelect = null;
+                    //Move thanh cong them lai cac click cho cac o khac
+                    //Xoa move vi Squareselect.piece = null;
+                    foreach (Square square in Piece.ActiveSquares)
+                    {
+                        square.Click -= new EventHandler(MovePiece);
+                    }
+
+                    for (int i = 0; i < 8; i++)
+                        for (int j = 0; j < 8; j++)
+                            if (squares[i, j].Piece != null && squares[i, j].Piece.Color != sq.Piece.Color)
+                                squares[i, j].Click += new EventHandler(ClickSquare);
+                            else if (squares[i, j].Piece != null && squares[i, j].Piece.Color == sq.Piece.Color)
+                                squares[i, j].Click -= new EventHandler(ClickSquare);
+                    //Sua lai mau
+
+                    foreach (Square square in Piece.ActiveSquares)
+                    {
+                        square.Color = square.Color;
+                    }
+                }
+
+            }
+            catch(Exception ex) {
+                Console.WriteLine(ex);
+            }
 
         }
         //Create Board
@@ -117,8 +129,7 @@ namespace Chess
                         c = Square.SquareColor.white;
                     parentForm.Controls.Add(squares[i, j]);  
                     left += squareWidth;
-                    squares[i, j].Click+=new EventHandler(ClickSquare);
-                }
+                 }
                 top += squareWidth;
                 if (c == Square.SquareColor.white)
                     c = Square.SquareColor.black;
@@ -161,7 +172,10 @@ namespace Chess
             Piece[] Black_Pawn = new PAWN[8];
             for (int i = 0; i < 8; i++)
                 Black_Pawn[i] = new PAWN(ref squares[6, i], Piece.ColorPiece.black, ref squares);
-
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                    if (squares[i,j].Piece!= null )
+                        squares[i, j].Click += new EventHandler(ClickSquare);
         }
     }
 }
