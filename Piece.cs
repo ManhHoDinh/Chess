@@ -69,7 +69,8 @@ namespace Chess
         protected int IndexRow, IndexCol;
         public virtual void Ways()
         {
-
+            _acSquares = null;
+            k = 0;
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                     if (Square == _squares[i, j])
@@ -93,31 +94,74 @@ namespace Chess
         public override void Ways()
         {
             base.Ways();
+            //[i, fix]
             for (int i = IndexRow + 1; i < 8; i++)
             {
                 if (_squares[i, IndexCol].Piece != null)
+                {
+                    if (_squares[i, IndexCol].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[i, IndexCol];
+                        
+                        _squares[i, IndexCol].BackColor = System.Drawing.Color.Red;
+                    }
                     break;
+                }
+                _activeSquares[k++] = _squares[i, IndexCol];
+                
                 _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
             }
+            //[i,fix]
             for (int i = IndexRow - 1; i >= 0; i--)
             {
                 if (_squares[i, IndexCol].Piece != null)
+                {
+                    if (_squares[i, IndexCol].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[i, IndexCol];
+                        
+                        _squares[i, IndexCol].BackColor = System.Drawing.Color.Red;
+                    }
                     break;
+                }
+                _activeSquares[k++] = _squares[i, IndexCol];
+                
                 _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
             }
             for (int i = IndexCol + 1; i < 8; i++)
             {
                 if (_squares[IndexRow, i].Piece != null)
+                {
+                    if (_squares[IndexRow, i].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[IndexRow, i];
+                        
+                        _squares[IndexRow, i].BackColor = System.Drawing.Color.Red;
+                    }
                     break;
+                }
+
+                _activeSquares[k++] = _squares[IndexRow, i];
+                
                 _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
             }
             for (int i = IndexCol - 1; i >= 0; i--)
             {
                 if (_squares[IndexRow, i].Piece != null)
+                {
+                    if (_squares[IndexRow, i].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[IndexRow, i];
+                        
+                        _squares[IndexRow, i].BackColor = System.Drawing.Color.Red;
+                    }
                     break;
+                }
+                _activeSquares[k++] = _squares[IndexRow, i];
+                
                 _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
             }
-
+            ActiveSquares = _activeSquares;
         }
     }
 
@@ -131,8 +175,88 @@ namespace Chess
                 _image = Resource.IMG_BISHOP_BLACK;
             sq.Image = _image;
         }
+        public override void Ways()
+        {
+            base.Ways();
+            //[i, fix]
+            int p = IndexRow + 1, t = IndexCol + 1;
+            while (p < 8 && t < 8)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p++; t++;
+            }
+
+            p = IndexRow - 1; t = IndexCol - 1;
+            while (p >= 0 && t >= 0)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p--; t--;
+            }
+
+            p = IndexRow - 1; t = IndexCol + 1;
+            while (p >= 0 && t < 8)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p--; t++;
+            }
+            p = IndexRow + 1; t = IndexCol - 1;
+            while (p < 8 && t >= 0)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p++; t--;
+            }
+            ActiveSquares = _activeSquares;
+        }
     }
-    internal class KING : Piece
+        internal class KING : Piece
     {
         public KING(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
@@ -153,8 +277,133 @@ namespace Chess
                 _image = Resource.IMG_KNIGHT_BLACK;
             sq.Image = _image;
         }
+
+        public override void Ways()
+        {
+            base.Ways();
+            ///1
+
+            if (IndexRow < 6 && IndexCol < 7)
+            {
+                if (_squares[IndexRow + 2, IndexCol + 1].Piece == null)
+                {
+                    _squares[IndexRow + 2, IndexCol + 1].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow + 2, IndexCol + 1];
+                }
+                else if (_squares[IndexRow + 2, IndexCol + 1].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow + 2, IndexCol + 1];
+
+                    _squares[IndexRow + 2, IndexCol + 1].BackColor = System.Drawing.Color.Red;
+                }
+            }
+            //2
+            if (IndexRow < 6 && IndexCol > 0)
+            {
+                if (_squares[IndexRow + 2, IndexCol - 1].Piece == null)
+                {
+                    _squares[IndexRow + 2, IndexCol - 1].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow + 2, IndexCol - 1];
+                }
+                else if (_squares[IndexRow + 2, IndexCol - 1].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow + 2, IndexCol - 1];
+
+                    _squares[IndexRow + 2, IndexCol - 1].BackColor = System.Drawing.Color.Red;
+                }
+            }
+            ///3
+            if (IndexRow < 7 && IndexCol < 6)
+            {
+                if (_squares[IndexRow + 1, IndexCol + 2].Piece == null)
+                {
+                    _squares[IndexRow + 1, IndexCol + 2].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow + 1, IndexCol + 2];
+                }
+                else if (_squares[IndexRow + 1, IndexCol + 2].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow + 1, IndexCol + 2];
+
+                    _squares[IndexRow + 1, IndexCol + 2].BackColor = System.Drawing.Color.Red;
+                }
+            }
+            //4
+            if (IndexRow < 6 && IndexCol > 1)
+            {
+                if (_squares[IndexRow + 1, IndexCol - 2].Piece == null)
+                {
+                    _squares[IndexRow + 1, IndexCol - 2].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow + 1, IndexCol - 2];
+                }
+                else if (_squares[IndexRow + 1, IndexCol - 2].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow + 1, IndexCol - 2];
+
+                    _squares[IndexRow + 1, IndexCol - 2].BackColor = System.Drawing.Color.Red;
+                }
+            }///5
+            if (IndexRow > 0 && IndexCol < 6)
+            {
+                if (_squares[IndexRow - 1, IndexCol + 2].Piece == null)
+                {
+                    _squares[IndexRow - 1, IndexCol + 2].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol + 2];
+                }
+                else if (_squares[IndexRow - 1, IndexCol + 2].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol + 2];
+
+                    _squares[IndexRow - 1, IndexCol + 2].BackColor = System.Drawing.Color.Red;
+                }
+            }
+            //6
+            if (IndexRow > 0 && IndexCol > 1)
+            {
+                if (_squares[IndexRow - 1, IndexCol - 2].Piece == null)
+                {
+                    _squares[IndexRow - 1, IndexCol - 2].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol - 2];
+                }
+                else if (_squares[IndexRow - 1, IndexCol - 2].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol - 2];
+
+                    _squares[IndexRow - 1, IndexCol - 2].BackColor = System.Drawing.Color.Red;
+                }
+            }///7
+            if (IndexRow > 1 && IndexCol > 0)
+            {
+                if (_squares[IndexRow - 2, IndexCol - 1].Piece == null)
+                {
+                    _squares[IndexRow - 2, IndexCol - 1].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow - 2, IndexCol - 1];
+                }
+                else if (_squares[IndexRow - 2, IndexCol - 1].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow - 2, IndexCol - 1];
+
+                    _squares[IndexRow - 2, IndexCol - 1].BackColor = System.Drawing.Color.Red;
+                }
+            }
+            //8
+            if (IndexRow > 1 && IndexCol < 7)
+            {
+                if (_squares[IndexRow - 2, IndexCol + 1].Piece == null)
+                {
+                    _squares[IndexRow - 2, IndexCol + 1].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow - 2, IndexCol + 1];
+                }
+                else if (_squares[IndexRow - 2, IndexCol + 1].Piece.Color != this.Color)
+                {
+                    _activeSquares[k++] = _squares[IndexRow - 2, IndexCol + 1];
+
+                    _squares[IndexRow - 2, IndexCol + 1].BackColor = System.Drawing.Color.Red;
+                }
+            }
+            ActiveSquares = _activeSquares;
+        }
     }
-    internal class PAWN : Piece
+        internal class PAWN : Piece
     {
         public PAWN(ref Square sq, ColorPiece color, ref Square[,] squares) : base(ref sq, color, ref squares)
         {
@@ -168,21 +417,148 @@ namespace Chess
         public override void Ways()
         {
             base.Ways();
-            //[i, fix]
+            if (Color == Piece.ColorPiece.white)
+            {
+                if (IndexRow == 1&&_squares[2,IndexCol].Piece == null)
+                    if (_squares[3,IndexCol].Piece == null)
+                    {
+                        _squares[3, IndexCol].BackColor = System.Drawing.Color.Blue;
+                        _activeSquares[k++] = _squares[3, IndexCol];
+                    }
+                if (IndexRow <7 && _squares[IndexRow+1, IndexCol].Piece == null)
+                {
+                    _squares[IndexRow+1, IndexCol].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow+1, IndexCol];
+                }
+                if (IndexRow < 7 &&IndexCol<7&& _squares[IndexRow + 1, IndexCol + 1].Piece != null && _squares[IndexRow + 1, IndexCol + 1].Piece.Color == ColorPiece.black)
+                {
+                    _squares[IndexRow + 1, IndexCol + 1].BackColor = System.Drawing.Color.Red;
+                    _activeSquares[k++] = _squares[IndexRow + 1, IndexCol + 1];
+                }
+
+                if (IndexRow < 7 && IndexCol > 0 && _squares[IndexRow + 1, IndexCol - 1].Piece != null && _squares[IndexRow + 1, IndexCol - 1].Piece.Color == ColorPiece.black)
+                {
+                    _squares[IndexRow + 1, IndexCol - 1].BackColor = System.Drawing.Color.Red;
+                    _activeSquares[k++] = _squares[IndexRow + 1, IndexCol -1];
+                }
+            }
+            else
+            {
+
+                if (IndexRow == 6 && _squares[5, IndexCol].Piece == null)
+                    if (_squares[4, IndexCol].Piece == null)
+                    {
+                        _squares[4, IndexCol].BackColor = System.Drawing.Color.Blue;
+                        _activeSquares[k++] = _squares[4, IndexCol];
+                    }
+                if (IndexRow > 0 && _squares[IndexRow - 1, IndexCol].Piece == null)
+                {
+                    _squares[IndexRow - 1, IndexCol].BackColor = System.Drawing.Color.Blue;
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol];
+                }
+                if (IndexRow >0 && IndexCol < 7 && _squares[IndexRow - 1, IndexCol + 1].Piece != null && _squares[IndexRow - 1, IndexCol + 1].Piece.Color == ColorPiece.white)
+                {
+                    _squares[IndexRow - 1, IndexCol + 1].BackColor = System.Drawing.Color.Red;
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol+1];
+                }
+
+                if (IndexRow > 0 && IndexCol > 0&&_squares[IndexRow - 1, IndexCol - 1].Piece != null && _squares[IndexRow - 1, IndexCol - 1].Piece.Color == ColorPiece.white)
+                {
+                    _squares[IndexRow - 1, IndexCol - 1].BackColor = System.Drawing.Color.Red;
+                    _activeSquares[k++] = _squares[IndexRow - 1, IndexCol -1];
+                }
+            }
+            
+            ///[i, fix]
+            /*
+             int p = IndexRow+ 1, t = IndexCol + 1;
+            while(p < 8 && t < 8)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p,t].BackColor = System.Drawing.Color.Blue;
+                p++; t++;
+            }
+
+            p = IndexRow - 1; t = IndexCol - 1;
+            while (p >= 0 && t >= 0)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p--; t--;
+            }
+
+            p = IndexRow - 1; t = IndexCol + 1;
+            while (p >= 0 && t < 8)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p--; t++;
+            }
+            p = IndexRow + 1; t = IndexCol - 1;
+            while (p < 8 && t >= 0)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p++; t--;
+            }
             for (int i = IndexRow + 1; i < 8; i++)
             {
                 if (_squares[i, IndexCol].Piece != null)
                 {
                     if (_squares[i, IndexCol].Piece.Color != this.Color)
                     {
-                         _activeSquares[k]=_squares[i, IndexCol];
-                        k++;
+                         _activeSquares[k++]=_squares[i, IndexCol];
+                        
                         _squares[i, IndexCol].BackColor = System.Drawing.Color.Red;
                     }
                     break;
                 }
-                 _activeSquares[k]=_squares[i, IndexCol];
-                k++;
+                 _activeSquares[k++]=_squares[i, IndexCol];
+                
                 _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
             }
             //[i,fix]
@@ -192,14 +568,14 @@ namespace Chess
                 {
                     if (_squares[i, IndexCol].Piece.Color != this.Color)
                     {
-                         _activeSquares[k]=_squares[i, IndexCol];
-                        k++;
+                         _activeSquares[k++]=_squares[i, IndexCol];
+                        
                         _squares[i, IndexCol].BackColor = System.Drawing.Color.Red;
                     }
                     break;
                 }
-                 _activeSquares[k]=_squares[i, IndexCol];
-                k++;
+                 _activeSquares[k++]=_squares[i, IndexCol];
+                
                 _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
             }
             for (int i = IndexCol + 1; i < 8; i++)
@@ -208,15 +584,15 @@ namespace Chess
                 {
                     if (_squares[IndexRow, i].Piece.Color != this.Color)
                     {
-                         _activeSquares[k]=_squares[IndexRow, i];
-                        k++;
+                         _activeSquares[k++]=_squares[IndexRow, i];
+                        
                         _squares[IndexRow, i].BackColor = System.Drawing.Color.Red;
                     }
                     break;
                 }
 
-                _activeSquares[k] = _squares[IndexRow, i];
-                k++;
+                _activeSquares[k++] = _squares[IndexRow, i];
+                
                 _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
             }
             for (int i = IndexCol - 1; i >= 0; i--)
@@ -225,16 +601,16 @@ namespace Chess
                 {
                     if (_squares[IndexRow, i].Piece.Color != this.Color)
                     {
-                         _activeSquares[k]=_squares[IndexRow, i];
-                        k++;
+                         _activeSquares[k++]=_squares[IndexRow, i];
+                        
                         _squares[IndexRow, i].BackColor = System.Drawing.Color.Red;
                     }
                     break;
                 }
-                 _activeSquares[k]=_squares[IndexRow, i];
-                k++;
+                 _activeSquares[k++]=_squares[IndexRow, i];
+                
                 _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
-            }
+            }*/
             ActiveSquares = _activeSquares;
         }
         
@@ -250,5 +626,152 @@ namespace Chess
             sq.Image = _image;
 
         }
+        public override void Ways()
+        {
+            base.Ways();
+            //[i, fix]
+            int p = IndexRow + 1, t = IndexCol + 1;
+            while (p < 8 && t < 8)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p++; t++;
+            }
+
+            p = IndexRow - 1; t = IndexCol - 1;
+            while (p >= 0 && t >= 0)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p--; t--;
+            }
+
+            p = IndexRow - 1; t = IndexCol + 1;
+            while (p >= 0 && t < 8)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p--; t++;
+            }
+            p = IndexRow + 1; t = IndexCol - 1;
+            while (p < 8 && t >= 0)
+            {
+                if (_squares[p, t].Piece != null)
+                {
+                    if (_squares[p, t].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[p, t];
+                        
+                        _squares[p, t].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[p, t];
+                
+                _squares[p, t].BackColor = System.Drawing.Color.Blue;
+                p++; t--;
+            }
+            for (int i = IndexRow + 1; i < 8; i++)
+            {
+                if (_squares[i, IndexCol].Piece != null)
+                {
+                    if (_squares[i, IndexCol].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[i, IndexCol];
+                        
+                        _squares[i, IndexCol].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[i, IndexCol];
+                
+                _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
+            }
+            //[i,fix]
+            for (int i = IndexRow - 1; i >= 0; i--)
+            {
+                if (_squares[i, IndexCol].Piece != null)
+                {
+                    if (_squares[i, IndexCol].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[i, IndexCol];
+                        
+                        _squares[i, IndexCol].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[i, IndexCol];
+                
+                _squares[i, IndexCol].BackColor = System.Drawing.Color.Blue;
+            }
+            for (int i = IndexCol + 1; i < 8; i++)
+            {
+                if (_squares[IndexRow, i].Piece != null)
+                {
+                    if (_squares[IndexRow, i].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[IndexRow, i];
+                        
+                        _squares[IndexRow, i].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+
+                _activeSquares[k++] = _squares[IndexRow, i];
+                
+                _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
+            }
+            for (int i = IndexCol - 1; i >= 0; i--)
+            {
+                if (_squares[IndexRow, i].Piece != null)
+                {
+                    if (_squares[IndexRow, i].Piece.Color != this.Color)
+                    {
+                        _activeSquares[k++] = _squares[IndexRow, i];
+                        
+                        _squares[IndexRow, i].BackColor = System.Drawing.Color.Red;
+                    }
+                    break;
+                }
+                _activeSquares[k++] = _squares[IndexRow, i];
+                
+                _squares[IndexRow, i].BackColor = System.Drawing.Color.Blue;
+            }
+            ActiveSquares = _activeSquares;
+        }
+
     }
 }

@@ -33,11 +33,15 @@ namespace Chess
                 if (SquareSelect!= null)
                 {
                     SquareSelect.Color = SquareSelect.Color;
-                    foreach (Square square in Piece.ActiveSquares)
+                    try
                     {
-                        square.Click -= new EventHandler(MovePiece);
-                        square.Color = square.Color;
+                        foreach (Square square in Piece.ActiveSquares)
+                        {
+                            square.Click -= new EventHandler(MovePiece);
+                            square.Color = square.Color;
+                        }
                     }
+                    catch { }
                 }
                 sq.BackColor = Color.Yellow;
                 SquareSelect = sq;
@@ -45,14 +49,16 @@ namespace Chess
                 ///Remove click nhung quan co khac mau khac
                 ///Add move squareSelect
                 ///
-                
                 sq.Piece.Ways();
-                foreach(Square square in Piece.ActiveSquares)
+                try
                 {
-                    square.Click -= new EventHandler(ClickSquare);
-                    square.Click += new EventHandler(MovePiece);
+                    foreach (Square square in Piece.ActiveSquares)
+                    {
+                        square.Click -= new EventHandler(ClickSquare);
+                        square.Click += new EventHandler(MovePiece);
+                    }
                 }
-
+                catch { }
 
             }
         }
