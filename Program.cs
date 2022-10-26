@@ -10,7 +10,7 @@ namespace Chess
     internal class Program
     {  
         public static Form MyForm = new Form();
-        public static Broad a = new Broad(MyForm,64);
+        public static Board a = new Board(MyForm,64);
         static void CreateForm()
         {
             MyForm.Size = new Size(800,1000);

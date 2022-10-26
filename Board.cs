@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Chess
 {
-    internal class Broad
+    internal class Board
     {
         public Square[,] squares;
         private Form parentForm;
         private int squareWidth;
 
-        public Broad(Form parent,  int DefaultSquareWidth = 64)
+        public Board(Form parent,  int DefaultSquareWidth = 64)
         {
             squares = new Square[8, 8];
             parentForm = parent;
@@ -74,6 +74,14 @@ namespace Chess
                 if (sq.Piece == null || sq.Piece != null && sq.Piece.Color != SquareSelect.Piece.Color)
                 {
                     //Set lai bg cu
+                    if(sq.Piece != null && sq.Piece is KING)
+                    {
+                        MessageBox.Show("{0} win", SquareSelect.Piece.Color.ToString());
+                        for (int i = 0; i < 8; i++)
+                            for (int j = 0; j < 8; j++)
+                                MessageBox.Show("Restart to play game");
+                    }
+                    
                     SquareSelect.Color = SquareSelect.Color;
                     //Piece in new square
                     sq.Piece = SquareSelect.Piece;
@@ -85,6 +93,18 @@ namespace Chess
                     SquareSelect.Piece = null;
                     SquareSelect.Image = null;
                     SquareSelect = null;
+                    if (sq.Piece is PAWN)
+                        for (int i = 0; i < 8; i++)
+                            if (sq == squares[7, i] && sq.Piece.Color == Piece.ColorPiece.white)
+                            { 
+                                sq.Piece = new QUEEN(ref sq, Piece.ColorPiece.white, ref squares);
+                                sq.Image = sq.Piece.Image;
+                            }
+                            else if (sq == squares[0, i] && sq.Piece.Color == Piece.ColorPiece.black)
+                            {
+                                sq.Piece = new QUEEN(ref sq, Piece.ColorPiece.black, ref squares);
+                                sq.Image = sq.Piece.Image;
+                            }
                     //Move thanh cong them lai cac click cho cac o khac
                     //Xoa move vi Squareselect.piece = null;
                     foreach (Square square in Piece.ActiveSquares)
@@ -113,7 +133,6 @@ namespace Chess
 
         }
         //Create Board
-
         private Square.SquareColor c = Square.SquareColor.white;
         public void init()
         {
